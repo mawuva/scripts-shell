@@ -90,6 +90,14 @@ if [ ! -d ".git" ]; then
     git clone -b "$BRANCH" "$REPO" .
 else
     echo "🔄 Mise à jour du dépôt..."
+    
+    # Vérifier et corriger l'URL si elle est en HTTPS
+    CURRENT_URL=$(git remote get-url origin)
+    if echo "$CURRENT_URL" | grep -q "https://"; then
+        echo "🔑 Conversion du remote HTTPS -> SSH..."
+        git remote set-url origin "$REPO"
+    fi
+
     git fetch --all
     git reset --hard "origin/$BRANCH"
     git clean -fd
