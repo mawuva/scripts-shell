@@ -19,8 +19,10 @@ COMPLETION_WAITING_DOTS="true"
 CASE_SENSITIVE="false"
 
 # Plugins
-plugins=(
+plugins=(*
+  aliases
   alias-finder
+  command-not-found
   git
   docker
   docker-compose

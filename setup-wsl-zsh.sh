@@ -55,6 +55,8 @@ COMPLETION_WAITING_DOTS="true"
 CASE_SENSITIVE="false"
 
 plugins=(
+  aliases
+  command-not-found
   alias-finder
   git
   docker
