@@ -1,6 +1,6 @@
-# 🚀 Scripts Shell - Configuration WSL Dev Environment
+# 🚀 Scripts Shell - Configuration Dev Environment
 
-Collection de scripts shell pour automatiser la configuration d'un environnement de développement complet sur WSL (Windows Subsystem for Linux).
+Collection de scripts shell pour automatiser la configuration d'un environnement de développement complet sur **WSL** (Windows Subsystem for Linux) et **VPS Ubuntu**.
 
 ## 📋 Vue d'ensemble
 
@@ -51,12 +51,35 @@ Installe uniquement les plugins Zsh recommandés.
 - `zsh-bat` - Support pour bat (cat amélioré)
 - `zoxide` - Navigation intelligente
 
-### 4. `update-zsh-config.sh` - Mise à jour de la configuration Zsh
+### 4. `setup-vps.sh` - Configuration complète pour VPS Ubuntu
+Script optimisé pour VPS Ubuntu qui combine l'installation de base, les plugins Zsh et la configuration complète.
+
+**Fonctionnalités :**
+- Exécution séquentielle : setup.sh → install-zsh-plugins.sh → configuration Zsh
+- Chemins adaptés pour VPS (~/codes au lieu de /mnt/d/codes)
+- Alias optimisés pour développement sur serveur
+- Configuration complète en une seule commande
+- Fallback intelligent si les scripts individuels sont absents
+
+### 5. `deploy-laravel-vps.sh` - Déploiement Laravel sur VPS
+Script de déploiement automatisé pour applications Laravel sur VPS Ubuntu.
+
+**Fonctionnalités :**
+- Clone/mise à jour automatique du dépôt Git
+- Installation des dépendances (Composer, NPM)
+- Configuration Laravel (migrations, cache, permissions)
+- Gestion des versions PHP
+- Backup automatique avant déploiement
+- Optimisations de production
+
+### 6. `update-zsh-config.sh` - Mise à jour de la configuration Zsh
 Met à jour la configuration Zsh existante avec la dernière version optimisée.
 
 ## 🚀 Installation et utilisation
 
-### Installation complète (recommandée)
+### 🖥️ Pour WSL (Windows Subsystem for Linux)
+
+#### Installation complète (recommandée)
 ```bash
 # Cloner le repository
 git clone <votre-repo> scripts-shell
@@ -69,7 +92,7 @@ chmod +x *.sh
 ./setup.sh
 ```
 
-### Installation par étapes
+#### Installation par étapes
 ```bash
 # 1. Installation de base
 ./setup.sh
@@ -82,6 +105,30 @@ chmod +x *.sh
 
 # 4. Mise à jour de la configuration (optionnel)
 ./update-zsh-config.sh
+```
+
+### 🖥️ Pour VPS Ubuntu
+
+#### Installation complète (recommandée)
+```bash
+# Cloner le repository
+git clone <votre-repo> scripts-shell
+cd scripts-shell
+
+# Rendre les scripts exécutables
+chmod +x *.sh
+
+# Exécuter l'installation complète pour VPS
+./setup-vps.sh
+```
+
+#### Déploiement Laravel
+```bash
+# Déployer une application Laravel
+./deploy-laravel-vps.sh git@github.com:user/projet.git main mon-projet
+
+# Avec version PHP spécifique
+./deploy-laravel-vps.sh git@github.com:user/projet.git main mon-projet 8.4
 ```
 
 ## ⚙️ Configuration après installation
@@ -147,6 +194,19 @@ composer --version
 ### Navigation
 - `cdcode` - cd ~/codes
 - `cds` - cd ~/codes
+- `cdh` - cd ~
+- `cdt` - cd /tmp
+
+### VPS Ubuntu (supplémentaires)
+- `serve` - php artisan serve --host=0.0.0.0 --port=8000
+- `serve80` - php artisan serve --host=0.0.0.0 --port=80
+- `serve443` - php artisan serve --host=0.0.0.0 --port=443
+- `logs` - tail -f storage/logs/laravel.log
+- `clear-logs` - > storage/logs/laravel.log
+- `d` - docker
+- `dc` - docker compose
+- `p` - pnpm
+- `py` - python3
 
 ## 🔧 Personnalisation
 
@@ -163,9 +223,11 @@ Modifiez la variable `ZSH_THEME` dans `~/.zshrc`.
 
 ```
 scripts-shell/
-├── setup.sh                 # Installation complète
-├── setup-wsl-zsh.sh         # Configuration Zsh optimisée
+├── setup.sh                 # Installation complète (WSL)
+├── setup-vps.sh             # Installation complète (VPS Ubuntu)
+├── setup-wsl-zsh.sh         # Configuration Zsh optimisée (WSL)
 ├── install-zsh-plugins.sh   # Installation des plugins
+├── deploy-laravel-vps.sh    # Déploiement Laravel sur VPS
 ├── update-zsh-config.sh     # Mise à jour de la configuration
 └── README.md                # Ce fichier
 ```
@@ -192,6 +254,24 @@ scripts-shell/
 4. **PHP alternatives non configurées**
    ```bash
    sudo update-alternatives --config php
+   ```
+
+5. **Permissions insuffisantes sur VPS**
+   ```bash
+   sudo chown -R $USER:$USER /var/www
+   sudo chmod -R 755 /var/www
+   ```
+
+6. **Déploiement Laravel échoue**
+   ```bash
+   # Vérifier les permissions
+   ls -la /var/www/
+   
+   # Vérifier la configuration .env
+   cat .env
+   
+   # Vérifier les logs
+   tail -f storage/logs/laravel.log
    ```
 
 ## 🤝 Contribution
