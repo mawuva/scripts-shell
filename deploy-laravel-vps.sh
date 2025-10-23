@@ -151,6 +151,22 @@ fi
 # ==========================================
 echo "🗄️ Gestion de la base de données..."
 
+# ==========================================
+# 🗃️ Création automatique du fichier SQLite si nécessaire
+# ==========================================
+if grep -q "DB_CONNECTION=sqlite" .env; then
+    DB_PATH=$(grep "^DB_DATABASE=" .env | cut -d '=' -f2)
+    if [ -z "$DB_PATH" ]; then
+        DB_PATH="database/database.sqlite"
+    fi
+    if [ ! -f "$DB_PATH" ]; then
+        echo "🗃️ Création du fichier SQLite : $DB_PATH"
+        mkdir -p "$(dirname "$DB_PATH")"
+        touch "$DB_PATH"
+        echo "✅ Base SQLite prête."
+    fi
+fi
+
 # Vérifier la connexion à la base de données
 if php artisan migrate:status &> /dev/null; then
     echo "✅ Connexion à la base de données OK"
